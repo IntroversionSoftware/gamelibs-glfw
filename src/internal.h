@@ -379,6 +379,9 @@ struct _GLFWinitconfig
     struct {
         GLFWbool  xcbVulkanSurface;
     } x11;
+    struct {
+        GLFWbool  msgInFiber;
+    } win32;
 };
 
 // Window configuration
