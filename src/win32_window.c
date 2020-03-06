@@ -1013,7 +1013,8 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             else if (window->cursorMode == GLFW_CURSOR_CAPTURED)
                 releaseCursor();
 
-            SetTimer(hWnd, 1, 1, NULL);
+            if (_glfw.hints.init.win32.msgInFiber)
+                SetTimer(hWnd, 1, 1, NULL);
             break;
         }
 
@@ -1030,16 +1031,15 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             else if (window->cursorMode == GLFW_CURSOR_CAPTURED)
                 captureCursor(window);
 
-            KillTimer(hWnd, 1);
+            if (_glfw.hints.init.win32.msgInFiber)
+                KillTimer(hWnd, 1);
             break;
         }
 
         case WM_TIMER:
         {
-            if (wParam == 1)
-            {
+            if (_glfw.hints.init.win32.msgInFiber && wParam == 1)
                 SwitchToFiber(_glfw.win32.mainFiber);
-            }
             break;
         }
 
@@ -2081,7 +2081,10 @@ void _glfwPollEventsWin32(void)
     HWND handle;
     _GLFWwindow* window;
 
-    SwitchToFiber(_glfw.win32.messageFiber);
+    if (_glfw.hints.init.win32.msgInFiber)
+        SwitchToFiber(_glfw.win32.messageFiber);
+    else
+        _glfwPollMessageLoopWin32();
 
     // HACK: Release modifier keys that the system did not emit KEYUP for
     // NOTE: Shift keys on Windows tend to "stick" when both are pressed as
