@@ -420,9 +420,21 @@ static GLFWbool createHelperWindow(void)
                                         DEVICE_NOTIFY_WINDOW_HANDLE);
     }
 
-    SwitchToFiber(_glfw.win32.messageFiber);
+    if (_glfw.hints.init.win32.msgInFiber)
+    {
+        SwitchToFiber(_glfw.win32.messageFiber);
+    }
+    else
+    {
+        MSG msg;
+        while (PeekMessageW(&msg, _glfw.win32.helperWindowHandle, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessageW(&msg);
+        }
+    }
 
-   return GLFW_TRUE;
+    return GLFW_TRUE;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -593,37 +605,41 @@ BOOL _glfwIsWindows10BuildOrGreaterWin32(WORD build)
     return RtlVerifyVersionInfo(&osvi, mask, cond) == 0;
 }
 
+void _glfwPollMessageLoopWin32(void)
+{
+    _GLFWwindow* window;
+    MSG msg;
+    while (PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE))
+    {
+        if (msg.message == WM_QUIT)
+        {
+            // NOTE: While GLFW does not itself post WM_QUIT, other processes
+            //       may post it to this one, for example Task Manager
+            // HACK: Treat WM_QUIT as a close on all windows
+
+            window = _glfw.windowListHead;
+            while (window)
+            {
+                _glfwInputWindowCloseRequest(window);
+                window = window->next;
+            }
+        }
+        else
+        {
+            TranslateMessage(&msg);
+            DispatchMessageW(&msg);
+        }
+    }
+}
+
 // Windows message dispatch fiber
 void CALLBACK messageFiberProc(LPVOID lpFiberParameter)
 {
-    MSG msg;
-    _GLFWwindow* window;
     (void)lpFiberParameter;
 
     for (;;)
     {
-        while (PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE))
-        {
-            if (msg.message == WM_QUIT)
-            {
-                // NOTE: While GLFW does not itself post WM_QUIT, other processes
-                //       may post it to this one, for example Task Manager
-                // HACK: Treat WM_QUIT as a close on all windows
-
-                window = _glfw.windowListHead;
-                while (window)
-                {
-                    _glfwInputWindowCloseRequest(window);
-                    window = window->next;
-                }
-            }
-            else
-            {
-                TranslateMessage(&msg);
-                DispatchMessageW(&msg);
-            }
-        }
-
+        _glfwPollMessageLoopWin32();
         SwitchToFiber(_glfw.win32.mainFiber);
     }
 }
@@ -725,13 +741,16 @@ int _glfwInitWin32(void)
     else if (IsWindowsVistaOrGreater())
         SetProcessDPIAware();
 
-    _glfw.win32.mainFiber = ConvertThreadToFiber(NULL);
-    if (!_glfw.win32.mainFiber)
-        return GLFW_FALSE;
+    if (_glfw.hints.init.win32.msgInFiber)
+    {
+        _glfw.win32.mainFiber = ConvertThreadToFiber(NULL);
+        if (!_glfw.win32.mainFiber)
+            return GLFW_FALSE;
 
-    _glfw.win32.messageFiber = CreateFiber(0, &messageFiberProc, NULL);
-    if (!_glfw.win32.messageFiber)
-        return GLFW_FALSE;
+        _glfw.win32.messageFiber = CreateFiber(0, &messageFiberProc, NULL);
+        if (!_glfw.win32.messageFiber)
+            return GLFW_FALSE;
+    }
 
     if (!createHelperWindow())
         return GLFW_FALSE;
@@ -755,8 +774,11 @@ void _glfwTerminateWin32(void)
     if (_glfw.win32.mainWindowClass)
         UnregisterClassW(MAKEINTATOM(_glfw.win32.mainWindowClass), _glfw.win32.instance);
 
-    DeleteFiber(_glfw.win32.messageFiber);
-    ConvertFiberToThread();
+    if (_glfw.hints.init.win32.msgInFiber)
+    {
+        DeleteFiber(_glfw.win32.messageFiber);
+        ConvertFiberToThread();
+    }
 
     _glfw_free(_glfw.win32.clipboardString);
     _glfw_free(_glfw.win32.rawInput);
