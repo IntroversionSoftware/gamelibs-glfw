@@ -159,6 +159,8 @@ static GLFWvidmode vidmodeFromCGDisplayMode(CGDisplayModeRef mode,
     GLFWvidmode result;
     result.width = (int) CGDisplayModeGetWidth(mode);
     result.height = (int) CGDisplayModeGetHeight(mode);
+    result.pixelwidth = (int) CGDisplayModeGetPixelWidth(mode);
+    result.pixelheight = (int) CGDisplayModeGetPixelHeight(mode);
     result.refreshRate = (int) round(CGDisplayModeGetRefreshRate(mode));
 
     if (result.refreshRate == 0)
@@ -391,7 +393,25 @@ void _glfwSetVideoModeCocoa(_GLFWmonitor* monitor, const GLFWvidmode* desired)
     if (_glfwCompareVideoModes(&current, best) == 0)
         return;
 
-    CFArrayRef modes = CGDisplayCopyAllDisplayModes(monitor->ns.displayID, NULL);
+    CFDictionaryRef dict = NULL;
+
+    if (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_7) {
+        const CFStringRef dictkeys[] = {kCGDisplayShowDuplicateLowResolutionModes};
+        const CFBooleanRef dictvalues[] = {kCFBooleanTrue};
+        dict = CFDictionaryCreate(NULL,
+                                  (const void **)dictkeys,
+                                  (const void **)dictvalues,
+                                  1,
+                                  &kCFCopyStringDictionaryKeyCallBacks,
+                                  &kCFTypeDictionaryValueCallBacks);
+    }
+
+    CFArrayRef modes = CGDisplayCopyAllDisplayModes(monitor->ns.displayID, dict);
+
+    if (dict) {
+        CFRelease(dict);
+    }
+
     const CFIndex count = CFArrayGetCount(modes);
     CGDisplayModeRef native = NULL;
 
@@ -516,7 +536,25 @@ GLFWvidmode* _glfwGetVideoModesCocoa(_GLFWmonitor* monitor, int* count)
 
     *count = 0;
 
-    CFArrayRef modes = CGDisplayCopyAllDisplayModes(monitor->ns.displayID, NULL);
+    CFDictionaryRef dict = NULL;
+
+    if (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_7) {
+        const CFStringRef dictkeys[] = {kCGDisplayShowDuplicateLowResolutionModes};
+        const CFBooleanRef dictvalues[] = {kCFBooleanTrue};
+        dict = CFDictionaryCreate(NULL,
+                                  (const void **)dictkeys,
+                                  (const void **)dictvalues,
+                                  1,
+                                  &kCFCopyStringDictionaryKeyCallBacks,
+                                  &kCFTypeDictionaryValueCallBacks);
+    }
+
+    CFArrayRef modes = CGDisplayCopyAllDisplayModes(monitor->ns.displayID, dict);
+
+    if (dict) {
+        CFRelease(dict);
+    }
+
     const CFIndex found = CFArrayGetCount(modes);
     GLFWvidmode* result = _glfw_calloc(found, sizeof(GLFWvidmode));
 

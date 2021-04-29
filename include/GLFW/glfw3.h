@@ -2045,6 +2045,12 @@ typedef struct GLFWvidmode
     /*! The height, in screen coordinates, of the video mode.
      */
     int height;
+    /*! The width, in pixels, of the video mode.
+     */
+    int pixelwidth;
+    /*! The height, in pixels, of the video mode.
+     */
+    int pixelheight;
     /*! The bit depth of the red channel of the video mode.
      */
     int redBits;

@@ -45,6 +45,8 @@ static int compareVideoModes(const void* fp, const void* sp)
     const int sbpp = sm->redBits + sm->greenBits + sm->blueBits;
     const int farea = fm->width * fm->height;
     const int sarea = sm->width * sm->height;
+    const int fpixarea = fm->pixelwidth * fm->pixelheight;
+    const int spixarea = sm->pixelwidth * sm->pixelheight;
 
     // First sort on color bits per pixel
     if (fbpp != sbpp)
@@ -57,6 +59,10 @@ static int compareVideoModes(const void* fp, const void* sp)
     // Then sort on width
     if (fm->width != sm->width)
         return fm->width - sm->width;
+
+    // Then sort on pixel area
+    if (fpixarea != spixarea)
+        return fpixarea - spixarea;
 
     // Lastly sort on refresh rate
     return fm->refreshRate - sm->refreshRate;
@@ -223,6 +229,7 @@ const GLFWvidmode* _glfwChooseVideoMode(_GLFWmonitor* monitor,
 {
     int i;
     unsigned int sizeDiff, leastSizeDiff = UINT_MAX;
+    unsigned int pixDiff, mostPixDiff = 0;
     unsigned int rateDiff, leastRateDiff = UINT_MAX;
     unsigned int colorDiff, leastColorDiff = UINT_MAX;
     const GLFWvidmode* current;
@@ -249,6 +256,11 @@ const GLFWvidmode* _glfwChooseVideoMode(_GLFWmonitor* monitor,
                        (current->height - desired->height) *
                        (current->height - desired->height));
 
+        pixDiff = abs((current->pixelwidth - desired->pixelwidth) *
+                      (current->pixelwidth - desired->pixelwidth) +
+                      (current->pixelheight - desired->pixelheight) *
+                      (current->pixelheight - desired->pixelheight));
+
         if (desired->refreshRate != GLFW_DONT_CARE)
             rateDiff = abs(current->refreshRate - desired->refreshRate);
         else
@@ -256,9 +268,11 @@ const GLFWvidmode* _glfwChooseVideoMode(_GLFWmonitor* monitor,
 
         if ((colorDiff < leastColorDiff) ||
             (colorDiff == leastColorDiff && sizeDiff < leastSizeDiff) ||
-            (colorDiff == leastColorDiff && sizeDiff == leastSizeDiff && rateDiff < leastRateDiff))
+            (colorDiff == leastColorDiff && sizeDiff == leastSizeDiff && pixDiff > mostPixDiff) ||
+            (colorDiff == leastColorDiff && sizeDiff == leastSizeDiff && pixDiff == mostPixDiff && rateDiff < leastRateDiff))
         {
             closest = current;
+            mostPixDiff = pixDiff;
             leastSizeDiff = sizeDiff;
             leastRateDiff = rateDiff;
             leastColorDiff = colorDiff;
