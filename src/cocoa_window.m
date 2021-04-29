@@ -936,8 +936,12 @@ GLFWbool _glfwCreateWindowCocoa(_GLFWwindow* window,
         {
             // EGL implementation on macOS use CALayer* EGLNativeWindowType so we
             // need to get the layer for EGL window surface creation.
+            [window->ns.view setWantsBestResolutionOpenGLSurface:window->ns.retina];
             [window->ns.view setWantsLayer:YES];
             window->ns.layer = [window->ns.view layer];
+
+            if (window->ns.retina)
+                [window->ns.layer setContentsScale:[window->ns.object backingScaleFactor]];
 
             if (!_glfwInitEGL())
                 return GLFW_FALSE;
