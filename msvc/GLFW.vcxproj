@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{6db2734c-4e1c-4a27-8fc1-7356cafd3972}</ProjectGuid>
+    <RootNamespace>GLFW</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="..\..\Toolset.props" />
+  </ImportGroup>
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\Master.props" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\context.c" />
+    <ClCompile Include="..\src\egl_context.c" />
+    <ClCompile Include="..\src\init.c" />
+    <ClCompile Include="..\src\input.c" />
+    <ClCompile Include="..\src\monitor.c" />
+    <ClCompile Include="..\src\null_init.c" />
+    <ClCompile Include="..\src\null_joystick.c" />
+    <ClCompile Include="..\src\null_monitor.c" />
+    <ClCompile Include="..\src\null_window.c" />
+    <ClCompile Include="..\src\platform.c" />
+    <ClCompile Include="..\src\vulkan.c" />
+    <ClCompile Include="..\src\wgl_context.c" />
+    <ClCompile Include="..\src\win32_init.c" />
+    <ClCompile Include="..\src\win32_joystick.c" />
+    <ClCompile Include="..\src\win32_module.c" />
+    <ClCompile Include="..\src\win32_monitor.c" />
+    <ClCompile Include="..\src\win32_thread.c" />
+    <ClCompile Include="..\src\win32_time.c" />
+    <ClCompile Include="..\src\win32_window.c" />
+    <ClCompile Include="..\src\window.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\GLFW\glfw3.h" />
+    <ClInclude Include="..\include\GLFW\glfw3native.h" />
+    <ClInclude Include="..\src\internal.h" />
+    <ClInclude Include="..\src\mappings.h" />
+    <ClInclude Include="..\src\null_joystick.h" />
+    <ClInclude Include="..\src\null_platform.h" />
+    <ClInclude Include="..\src\platform.h" />
+    <ClInclude Include="..\src\win32_joystick.h" />
+    <ClInclude Include="..\src\win32_platform.h" />
+    <ClInclude Include="..\src\win32_thread.h" />
+    <ClInclude Include="..\src\win32_time.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
