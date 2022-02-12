@@ -1553,6 +1553,8 @@ int _glfwInitX11(void)
 
 void _glfwTerminateX11(void)
 {
+    _glfwTerminateEGL();
+
     if (_glfw.x11.helperWindowHandle)
     {
         if (XGetSelectionOwner(_glfw.x11.display, _glfw.x11.CLIPBOARD) ==
@@ -1636,7 +1638,6 @@ void _glfwTerminateX11(void)
     _glfwTerminateOSMesa();
     // NOTE: These need to be unloaded after XCloseDisplay, as they register
     //       cleanup callbacks that get called by that function
-    _glfwTerminateEGL();
     _glfwTerminateGLX();
 
     if (_glfw.x11.xlib.handle)
