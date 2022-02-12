@@ -60,6 +60,7 @@
     <ClCompile Include="..\src\null_joystick.c" />
     <ClCompile Include="..\src\null_monitor.c" />
     <ClCompile Include="..\src\null_window.c" />
+    <ClCompile Include="..\src\osmesa_context.c" />
     <ClCompile Include="..\src\platform.c" />
     <ClCompile Include="..\src\vulkan.c" />
     <ClCompile Include="..\src\wgl_context.c" />
