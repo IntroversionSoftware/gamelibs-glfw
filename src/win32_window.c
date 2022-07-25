@@ -1170,6 +1170,11 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         case WM_ERASEBKGND:
         {
+            RECT client_rect;
+            GetClientRect(hWnd, &client_rect);
+            HBRUSH brush = CreateSolidBrush(0);
+            FillRect(GetDC(hWnd), &client_rect, brush);
+            DeleteObject(brush);
             return TRUE;
         }
 
