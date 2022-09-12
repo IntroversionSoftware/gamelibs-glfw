@@ -557,6 +557,15 @@ GLFWAPI EGLContext glfwGetEGLContext(GLFWwindow* window);
  *  @ingroup native
  */
 GLFWAPI EGLSurface glfwGetEGLSurface(GLFWwindow* window);
+
+typedef void (*GLFWeglproc)(void);
+GLFWAPI GLFWglproc glfwGetEGLProcAddress(const char* procname);
+
+typedef EGLAttrib *(GLFWAPI *glfwEGLPlatformAttribCallback_t)(EGLenum *);
+typedef EGLAttrib *(GLFWAPI *glfwEGLSurfaceAttribCallback_t)(EGLDisplay, EGLConfig);
+typedef EGLint *(GLFWAPI *glfwEGLContextAttribCallback_t)(EGLDisplay, EGLSurface, EGLConfig);
+
+GLFWAPI void glfwSetEGLCallbacks(glfwEGLPlatformAttribCallback_t, glfwEGLSurfaceAttribCallback_t, glfwEGLContextAttribCallback_t);
 #endif
 
 #if defined(GLFW_EXPOSE_NATIVE_OSMESA)
