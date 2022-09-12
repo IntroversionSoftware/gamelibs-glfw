@@ -245,6 +245,11 @@ typedef EGLSurface (APIENTRY * PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC)(EGLDisp
 #define eglGetPlatformDisplayEXT _glfw.egl.GetPlatformDisplayEXT
 #define eglCreatePlatformWindowSurfaceEXT _glfw.egl.CreatePlatformWindowSurfaceEXT
 
+typedef void (*GLFWeglproc)(void);
+typedef EGLAttrib *(GLFWAPI *glfwEGLPlatformAttribCallback_t)(EGLenum *platform);
+typedef EGLAttrib *(GLFWAPI *glfwEGLSurfaceAttribCallback_t)(EGLDisplay, EGLConfig);
+typedef EGLint *(GLFWAPI *glfwEGLContextAttribCallback_t)(void);
+
 #define OSMESA_RGBA 0x1908
 #define OSMESA_FORMAT 0x22
 #define OSMESA_DEPTH_BITS 0x30
@@ -853,6 +858,9 @@ struct _GLFWlibrary
         PFN_eglGetPlatformDisplay   GetPlatformDisplay;
         PFN_eglCreatePlatformWindowSurface  CreatePlatformWindowSurface;
 
+        glfwEGLPlatformAttribCallback_t PlatformAttribCallback;
+        glfwEGLSurfaceAttribCallback_t SurfaceAttribCallback;
+        glfwEGLContextAttribCallback_t ContextAttribCallback;
     } egl;
 
     struct {
