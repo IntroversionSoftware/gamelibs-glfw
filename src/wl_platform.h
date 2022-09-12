@@ -663,7 +663,7 @@ void _glfwSetCursorWayland(_GLFWwindow* window, _GLFWcursor* cursor);
 void _glfwSetClipboardStringWayland(const char* string);
 const char* _glfwGetClipboardStringWayland(void);
 
-EGLenum _glfwGetEGLPlatformWayland(EGLint** attribs);
+EGLenum _glfwGetEGLPlatformWayland(EGLAttrib** attribs);
 EGLNativeDisplayType _glfwGetEGLNativeDisplayWayland(void);
 EGLNativeWindowType _glfwGetEGLNativeWindowWayland(_GLFWwindow* window);
 

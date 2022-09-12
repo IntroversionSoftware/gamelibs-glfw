@@ -551,7 +551,7 @@ const char* _glfwGetClipboardStringNull(void)
     return _glfw.null.clipboardString;
 }
 
-EGLenum _glfwGetEGLPlatformNull(EGLint** attribs)
+EGLenum _glfwGetEGLPlatformNull(EGLAttrib** attribs)
 {
     return 0;
 }

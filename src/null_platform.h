@@ -260,7 +260,7 @@ const char* _glfwGetClipboardStringNull(void);
 const char* _glfwGetScancodeNameNull(int scancode);
 int _glfwGetKeyScancodeNull(int key);
 
-EGLenum _glfwGetEGLPlatformNull(EGLint** attribs);
+EGLenum _glfwGetEGLPlatformNull(EGLAttrib** attribs);
 EGLNativeDisplayType _glfwGetEGLNativeDisplayNull(void);
 EGLNativeWindowType _glfwGetEGLNativeWindowNull(_GLFWwindow* window);
 

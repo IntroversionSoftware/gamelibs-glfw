@@ -3082,7 +3082,7 @@ const char* _glfwGetClipboardStringX11(void)
     return getSelectionString(_glfw.x11.CLIPBOARD);
 }
 
-EGLenum _glfwGetEGLPlatformX11(EGLint** attribs)
+EGLenum _glfwGetEGLPlatformX11(EGLAttrib** attribs)
 {
     if (_glfw.egl.ANGLE_platform_angle)
     {
@@ -3102,7 +3102,7 @@ EGLenum _glfwGetEGLPlatformX11(EGLint** attribs)
 
         if (type)
         {
-            *attribs = _glfw_calloc(5, sizeof(EGLint));
+            *attribs = _glfw_calloc(5, sizeof(EGLAttrib));
             (*attribs)[0] = EGL_PLATFORM_ANGLE_TYPE_ANGLE;
             (*attribs)[1] = type;
             (*attribs)[2] = EGL_PLATFORM_ANGLE_NATIVE_PLATFORM_TYPE_ANGLE;
