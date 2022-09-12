@@ -551,7 +551,7 @@ const char* _glfwGetClipboardStringNull(void)
     return _glfw.null.clipboardString;
 }
 
-EGLenum _glfwGetEGLPlatformNull(EGLint** attribs)
+EGLenum _glfwGetEGLPlatformNull(EGLAttrib** attribs)
 {
     if (_glfw.egl.EXT_platform_base && _glfw.egl.MESA_platform_surfaceless)
         return EGL_PLATFORM_SURFACELESS_MESA;

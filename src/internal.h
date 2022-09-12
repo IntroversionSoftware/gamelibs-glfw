@@ -195,6 +195,7 @@ typedef void* EGLConfig;
 typedef void* EGLContext;
 typedef void* EGLDisplay;
 typedef void* EGLSurface;
+typedef intptr_t EGLAttrib;
 
 typedef void* EGLNativeDisplayType;
 typedef void* EGLNativeWindowType;
@@ -217,6 +218,8 @@ typedef EGLBoolean (APIENTRY * PFN_eglSwapBuffers)(EGLDisplay,EGLSurface);
 typedef EGLBoolean (APIENTRY * PFN_eglSwapInterval)(EGLDisplay,EGLint);
 typedef const char* (APIENTRY * PFN_eglQueryString)(EGLDisplay,EGLint);
 typedef GLFWglproc (APIENTRY * PFN_eglGetProcAddress)(const char*);
+typedef EGLDisplay (EGLAPIENTRY * PFN_eglGetPlatformDisplay)(EGLenum,void*,const EGLAttrib*);
+typedef EGLSurface (EGLAPIENTRY * PFN_eglCreatePlatformWindowSurface)(EGLDisplay,EGLConfig,void*,const EGLAttrib*);
 #define eglGetConfigAttrib _glfw.egl.GetConfigAttrib
 #define eglGetConfigs _glfw.egl.GetConfigs
 #define eglGetDisplay _glfw.egl.GetDisplay
@@ -234,6 +237,8 @@ typedef GLFWglproc (APIENTRY * PFN_eglGetProcAddress)(const char*);
 #define eglSwapInterval _glfw.egl.SwapInterval
 #define eglQueryString _glfw.egl.QueryString
 #define eglGetProcAddress _glfw.egl.GetProcAddress
+#define eglGetPlatformDisplay _glfw.egl.GetPlatformDisplay
+#define eglCreatePlatformWindowSurface _glfw.egl.CreatePlatformWindowSurface
 
 typedef EGLDisplay (APIENTRY * PFNEGLGETPLATFORMDISPLAYEXTPROC)(EGLenum,void*,const EGLint*);
 typedef EGLSurface (APIENTRY * PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC)(EGLDisplay,EGLConfig,void*,const EGLint*);
@@ -755,7 +760,7 @@ struct _GLFWplatform
     void (*waitEventsTimeout)(double);
     void (*postEmptyEvent)(void);
     // EGL
-    EGLenum (*getEGLPlatform)(EGLint**);
+    EGLenum (*getEGLPlatform)(EGLAttrib**);
     EGLNativeDisplayType (*getEGLNativeDisplay)(void);
     EGLNativeWindowType (*getEGLNativeWindow)(_GLFWwindow*);
     // vulkan
@@ -845,9 +850,9 @@ struct _GLFWlibrary
         PFN_eglSwapInterval         SwapInterval;
         PFN_eglQueryString          QueryString;
         PFN_eglGetProcAddress       GetProcAddress;
+        PFN_eglGetPlatformDisplay   GetPlatformDisplay;
+        PFN_eglCreatePlatformWindowSurface  CreatePlatformWindowSurface;
 
-        PFNEGLGETPLATFORMDISPLAYEXTPROC GetPlatformDisplayEXT;
-        PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC CreatePlatformWindowSurfaceEXT;
     } egl;
 
     struct {

@@ -2496,7 +2496,7 @@ const char* _glfwGetClipboardStringWin32(void)
     return _glfw.win32.clipboardString;
 }
 
-EGLenum _glfwGetEGLPlatformWin32(EGLint** attribs)
+EGLenum _glfwGetEGLPlatformWin32(EGLAttrib** attribs)
 {
     if (_glfw.egl.ANGLE_platform_angle)
     {
@@ -2526,7 +2526,7 @@ EGLenum _glfwGetEGLPlatformWin32(EGLint** attribs)
 
         if (type)
         {
-            *attribs = _glfw_calloc(3, sizeof(EGLint));
+            *attribs = _glfw_calloc(3, sizeof(EGLAttrib));
             (*attribs)[0] = EGL_PLATFORM_ANGLE_TYPE_ANGLE;
             (*attribs)[1] = type;
             (*attribs)[2] = EGL_NONE;

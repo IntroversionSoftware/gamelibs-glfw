@@ -268,7 +268,7 @@ void _glfwSetCursorCocoa(_GLFWwindow* window, _GLFWcursor* cursor);
 void _glfwSetClipboardStringCocoa(const char* string);
 const char* _glfwGetClipboardStringCocoa(void);
 
-EGLenum _glfwGetEGLPlatformCocoa(EGLint** attribs);
+EGLenum _glfwGetEGLPlatformCocoa(EGLAttrib** attribs);
 EGLNativeDisplayType _glfwGetEGLNativeDisplayCocoa(void);
 EGLNativeWindowType _glfwGetEGLNativeWindowCocoa(_GLFWwindow* window);
 
