@@ -1880,7 +1880,7 @@ const char* _glfwGetClipboardStringCocoa(void)
     } // autoreleasepool
 }
 
-EGLenum _glfwGetEGLPlatformCocoa(EGLint** attribs)
+EGLenum _glfwGetEGLPlatformCocoa(EGLAttrib ** attribs)
 {
     if (_glfw.egl.ANGLE_platform_angle)
     {
@@ -1900,7 +1900,7 @@ EGLenum _glfwGetEGLPlatformCocoa(EGLint** attribs)
 
         if (type)
         {
-            *attribs = _glfw_calloc(3, sizeof(EGLint));
+            *attribs = _glfw_calloc(3, sizeof(EGLAttrib));
             (*attribs)[0] = EGL_PLATFORM_ANGLE_TYPE_ANGLE;
             (*attribs)[1] = type;
             (*attribs)[2] = EGL_NONE;

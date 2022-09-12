@@ -2774,7 +2774,7 @@ const char* _glfwGetClipboardStringWayland(void)
     return _glfw.wl.clipboardString;
 }
 
-EGLenum _glfwGetEGLPlatformWayland(EGLint** attribs)
+EGLenum _glfwGetEGLPlatformWayland(EGLAttrib** attribs)
 {
     if (_glfw.egl.EXT_platform_base && _glfw.egl.EXT_platform_wayland)
         return EGL_PLATFORM_WAYLAND_EXT;

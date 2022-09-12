@@ -599,7 +599,7 @@ void _glfwSetCursorWin32(_GLFWwindow* window, _GLFWcursor* cursor);
 void _glfwSetClipboardStringWin32(const char* string);
 const char* _glfwGetClipboardStringWin32(void);
 
-EGLenum _glfwGetEGLPlatformWin32(EGLint** attribs);
+EGLenum _glfwGetEGLPlatformWin32(EGLAttrib** attribs);
 EGLNativeDisplayType _glfwGetEGLNativeDisplayWin32(void);
 EGLNativeWindowType _glfwGetEGLNativeWindowWin32(_GLFWwindow* window);
 
