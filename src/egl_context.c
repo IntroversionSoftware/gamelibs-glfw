@@ -486,15 +486,27 @@ GLFWbool _glfwInitEGL(void)
             _glfwStringInExtensionString("EGL_ANGLE_platform_angle_metal", extensions);
     }
 
-    if (_glfw.egl.EXT_platform_base)
+    _glfw.egl.platform = 0;
+
+    if (_glfw.egl.PlatformAttribCallback)
     {
-        _glfw.egl.GetPlatformDisplayEXT = (PFNEGLGETPLATFORMDISPLAYEXTPROC)
-            eglGetProcAddress("eglGetPlatformDisplayEXT");
-        _glfw.egl.CreatePlatformWindowSurfaceEXT = (PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC)
-            eglGetProcAddress("eglCreatePlatformWindowSurfaceEXT");
+        attribs = _glfw.egl.PlatformAttribCallback(&_glfw.egl.platform);
+        if (!_glfw.egl.platform) {
+            _glfwInputError(GLFW_API_UNAVAILABLE,
+                            "EGL: Platform attribute callback did not specify an EGL platform ID");
+            return GLFW_FALSE;
+        }
+        if (!attribs) {
+            _glfwInputError(GLFW_API_UNAVAILABLE,
+                            "EGL: Platform attribute callback returned a NULL pointer");
+            return GLFW_FALSE;
+        }
+    }
+    else
+    {
+        _glfw.egl.platform = _glfw.platform.getEGLPlatform(&attribs);
     }
 
-    _glfw.egl.platform = _glfw.platform.getEGLPlatform(&attribs);
     if (_glfw.egl.platform)
     {
         _glfw.egl.display =
@@ -505,7 +517,8 @@ GLFWbool _glfwInitEGL(void)
     else
         _glfw.egl.display = eglGetDisplay(_glfw.platform.getEGLNativeDisplay());
 
-    _glfw_free(attribs);
+    if (!_glfw.egl.PlatformAttribCallback)
+        _glfw_free(attribs);
 
     if (_glfw.egl.display == EGL_NO_DISPLAY)
     {
@@ -959,3 +972,21 @@ GLFWAPI EGLSurface glfwGetEGLSurface(GLFWwindow* handle)
     return window->context.egl.surface;
 }
 
+GLFWAPI GLFWeglproc glfwGetEGLProcAddress(const char *procname)
+{
+    _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
+    if (!_glfw.egl.GetProcAddress)
+    {
+        _glfwInputError(GLFW_NOT_INITIALIZED, NULL);
+        return (GLFWeglproc)NULL;
+    }
+    return (GLFWeglproc)eglGetProcAddress(procname);
+}
+
+GLFWAPI void glfwSetEGLCallbacks(glfwEGLPlatformAttribCallback_t _platform, glfwEGLSurfaceAttribCallback_t _surface, glfwEGLContextAttribCallback_t _context)
+{
+    _GLFW_REQUIRE_INIT();
+    _glfw.egl.PlatformAttribCallback = _platform;
+    _glfw.egl.SurfaceAttribCallback = _surface;
+    _glfw.egl.ContextAttribCallback = _context;
+}
