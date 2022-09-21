@@ -35,6 +35,17 @@
 #include <assert.h>
 #include <windowsx.h>
 #include <shellapi.h>
+#include <dwmapi.h>
+
+#pragma comment (lib, "dwmapi.lib")
+
+/* Dark mode support */
+static void
+setWindowDarkMode(HWND hwnd)
+{
+    BOOL value = TRUE;
+    DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(value));
+}
 
 // Returns the window style for the specified window
 //
@@ -1455,6 +1466,8 @@ static int createNativeWindow(_GLFWwindow* window,
                              "Win32: Failed to create window");
         return GLFW_FALSE;
     }
+
+    setWindowDarkMode(window->win32.handle);
 
     SetPropW(window->win32.handle, L"GLFW", window);
 
