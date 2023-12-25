@@ -483,6 +483,7 @@ struct _GLFWfbconfig
     GLFWbool    sRGB;
     GLFWbool    doublebuffer;
     GLFWbool    transparent;
+    GLFWbool    floatbuffers;
     uintptr_t   handle;
 };
 
@@ -543,6 +544,7 @@ struct _GLFWwindow
     GLFWbool            shouldClose;
     void*               userPointer;
     GLFWbool            doublebuffer;
+    GLFWbool            floatbuffers;
     GLFWvidmode         videoMode;
     _GLFWmonitor*       monitor;
     _GLFWcursor*        cursor;
