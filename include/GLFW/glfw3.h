@@ -1022,6 +1022,12 @@ extern "C" {
  *  [attribute](@ref GLFW_DOUBLEBUFFER_attrib).
  */
 #define GLFW_DOUBLEBUFFER           0x00021010
+/*! @brief Framebuffer using floating-point color format
+ *
+ *  Framebuffer floating-point color format [hint](@ref GLFW_FLOATBUFFERS_hint) and
+ *  [attribute](@ref GLFW_FLOATBUFFERS_attrib).
+ */
+#define GLFW_FLOATBUFFERS           0x00021020
 
 /*! @brief Context client API hint and attribute.
  *

@@ -235,6 +235,7 @@ GLFWAPI GLFWwindow* glfwCreateWindow(int width, int height,
     window->cursorMode       = GLFW_CURSOR_NORMAL;
 
     window->doublebuffer = fbconfig.doublebuffer;
+    window->floatbuffers = fbconfig.floatbuffers;
 
     window->minwidth    = GLFW_DONT_CARE;
     window->minheight   = GLFW_DONT_CARE;
@@ -336,6 +337,9 @@ GLFWAPI void glfwWindowHint(int hint, int value)
             return;
         case GLFW_DOUBLEBUFFER:
             _glfw.hints.framebuffer.doublebuffer = value ? GLFW_TRUE : GLFW_FALSE;
+            return;
+        case GLFW_FLOATBUFFERS:
+            _glfw.hints.framebuffer.floatbuffers = value ? GLFW_TRUE : GLFW_FALSE;
             return;
         case GLFW_TRANSPARENT_FRAMEBUFFER:
             _glfw.hints.framebuffer.transparent = value ? GLFW_TRUE : GLFW_FALSE;
@@ -912,6 +916,8 @@ GLFWAPI int glfwGetWindowAttrib(GLFWwindow* handle, int attrib)
             return window->autoIconify;
         case GLFW_DOUBLEBUFFER:
             return window->doublebuffer;
+        case GLFW_FLOATBUFFERS:
+            return window->floatbuffers;
         case GLFW_CLIENT_API:
             return window->context.client;
         case GLFW_CONTEXT_CREATION_API:

@@ -230,6 +230,9 @@ const _GLFWfbconfig* _glfwChooseFBConfig(const _GLFWfbconfig* desired,
 
             if (desired->transparent != current->transparent)
                 missing++;
+
+            if (desired->floatbuffers != current->floatbuffers)
+                missing++;
         }
 
         // These polynomials make many small channel size differences matter
