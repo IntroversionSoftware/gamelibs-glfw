@@ -558,6 +558,8 @@ GLFWAPI EGLContext glfwGetEGLContext(GLFWwindow* window);
  */
 GLFWAPI EGLSurface glfwGetEGLSurface(GLFWwindow* window);
 
+GLFWAPI EGLConfig glfwGetEGLConfig(GLFWwindow* window);
+
 typedef void (*GLFWeglproc)(void);
 GLFWAPI GLFWglproc glfwGetEGLProcAddress(const char* procname);
 
