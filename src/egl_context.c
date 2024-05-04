@@ -726,7 +726,7 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
 
     if (_glfw.egl.ContextAttribCallback)
     {
-        EGLint *pAttribs, *cbAttribs = _glfw.egl.ContextAttribCallback();
+        EGLint *pAttribs, *cbAttribs = _glfw.egl.ContextAttribCallback(_glfw.egl.display, window->context.egl.surface, config);
         if (!cbAttribs) {
             _glfwInputError(GLFW_VERSION_UNAVAILABLE,
                             "EGL: Context attribute callback returned a NULL pointer");
@@ -785,11 +785,11 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
         int width, height;
         _glfw.platform.getFramebufferSize(window, &width, &height);
 
-        SET_ATTRIB(EGL_WIDTH, width);
-        SET_ATTRIB(EGL_HEIGHT, height);
+        SET_EGL_ATTRIB(EGL_WIDTH, width);
+        SET_EGL_ATTRIB(EGL_HEIGHT, height);
     }
 
-    SET_ATTRIB(EGL_NONE, EGL_NONE);
+    SET_EGL_ATTRIB(EGL_NONE, EGL_NONE);
 
     native = _glfw.platform.getEGLNativeWindow(window);
     if (!_glfw.egl.platform || _glfw.egl.platform == EGL_PLATFORM_ANGLE_ANGLE)
@@ -804,12 +804,12 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
     {
         // HACK: Use a pbuffer surface as the default framebuffer
         window->context.egl.surface =
-            eglCreatePbufferSurface(_glfw.egl.display, config, attribs);
+            eglCreatePbufferSurface(_glfw.egl.display, config, intAttribs);
     }
     else
     {
         window->context.egl.surface =
-            eglCreatePlatformWindowSurfaceEXT(_glfw.egl.display, config, native, attribs);
+            eglCreatePlatformWindowSurface(_glfw.egl.display, config, native, eglAttribs);
     }
 
     if (window->context.egl.surface == EGL_NO_SURFACE)

@@ -219,8 +219,8 @@ typedef EGLBoolean (APIENTRY * PFN_eglSwapBuffers)(EGLDisplay,EGLSurface);
 typedef EGLBoolean (APIENTRY * PFN_eglSwapInterval)(EGLDisplay,EGLint);
 typedef const char* (APIENTRY * PFN_eglQueryString)(EGLDisplay,EGLint);
 typedef GLFWglproc (APIENTRY * PFN_eglGetProcAddress)(const char*);
-typedef EGLDisplay (EGLAPIENTRY * PFN_eglGetPlatformDisplay)(EGLenum,void*,const EGLAttrib*);
-typedef EGLSurface (EGLAPIENTRY * PFN_eglCreatePlatformWindowSurface)(EGLDisplay,EGLConfig,void*,const EGLAttrib*);
+typedef EGLDisplay (APIENTRY * PFN_eglGetPlatformDisplay)(EGLenum,void*,const EGLAttrib*);
+typedef EGLSurface (APIENTRY * PFN_eglCreatePlatformWindowSurface)(EGLDisplay,EGLConfig,void*,const EGLAttrib*);
 #define eglGetConfigAttrib _glfw.egl.GetConfigAttrib
 #define eglGetConfigs _glfw.egl.GetConfigs
 #define eglGetDisplay _glfw.egl.GetDisplay
@@ -247,9 +247,9 @@ typedef EGLSurface (APIENTRY * PFNEGLCREATEPLATFORMWINDOWSURFACEEXTPROC)(EGLDisp
 #define eglCreatePlatformWindowSurfaceEXT _glfw.egl.CreatePlatformWindowSurfaceEXT
 
 typedef void (*GLFWeglproc)(void);
-typedef EGLAttrib *(GLFWAPI *glfwEGLPlatformAttribCallback_t)(EGLenum *platform);
+typedef EGLAttrib *(GLFWAPI *glfwEGLPlatformAttribCallback_t)(EGLenum *);
 typedef EGLAttrib *(GLFWAPI *glfwEGLSurfaceAttribCallback_t)(EGLDisplay, EGLConfig);
-typedef EGLint *(GLFWAPI *glfwEGLContextAttribCallback_t)(void);
+typedef EGLint *(GLFWAPI *glfwEGLContextAttribCallback_t)(EGLDisplay, EGLSurface, EGLConfig);
 
 #define OSMESA_RGBA 0x1908
 #define OSMESA_FORMAT 0x22
